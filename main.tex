@@ -616,4 +616,181 @@ Our goal is to have our pivots left to right strictly. That is in \textbf{Row Ec
 \begin{definitionbox}{Singular Matrix}
     A matrix $A$ is singular if its row echelon form has a row full of zeroes. This means there is either no solution or an infinite number of solutions.
 \end{definitionbox}
+A variable with no pivot is free. That is, it can be set to anything. The number of dimensions of our solution space is equal to the number of free variables! This is a very cool and important fact to remember!!!!
+
+\section{Products, Adjacency Matrices, Matrix Exponentiation}
+\begin{examplebox}{}
+    \begin{align}
+        x_1+x_2=12 \\
+        x_1=x_3+x_4 \\
+        x_2+x_3=x_5 \\
+        x_4+x_5=12
+    \end{align}
+\end{examplebox}
+\begin{proof}
+    We begin with the augmented matrix.
+    \begin{align*}
+        \begin{bmatrix}
+            1 & 1 & 0 & 0 & 0 & 12 \\
+            1 & 0 & -1 & -1 & 0 & 0\\
+            0 & 1 & 1 & 0 & -1 & 0\\
+            0 & 0 & 0 & 1 & 1 & 12
+        \end{bmatrix}
+    \end{align*}
+    And after changing to row echelon form (REF) we see that the last row is singular (filled with zeroeos). The singularity of this matric leads to an infinite number of solutions (courtesy of our free variables). 
+\end{proof}
+
+\subsection{Matrix Multiplication}
+$A(Bv)=Cv \implies C=AB$
+Suppose we have an $m \times n$ matrix A and $n \times p$ matrix B. Then
+\begin{align*}
+    C_{i,k} &= \sum_{j=1}^{n} A_{i,j}B_{j,k} \\
+            &= ith row A* kth col B \\
+            &= C_k = AB_k
+\end{align*}
+The last line should be understood as the kth column of $C$.
+\begin{theorembox}{Properties of Matrix Multiplication}
+    We have the associative property such that $A(BC)=(AB)C$. We have the distributive property (which holds for the right and left) $A(B+C)=AB+AC$. It is important to note that it is not necessarily true that $AB = BA$. In fact, it is more often true that $AB \neq BA$.
+\end{theorembox}
+
+\begin{definitionbox}{Walk}
+    A walk is a sequence of vertices such that every consecutive pair is connected by an edge, with repeats permitted. We can use an adjacency matrix to represent a directed (or undirected) graph of several nodes. Recall Markov Chains from $18.600$!
+\end{definitionbox}
+
+\begin{theorembox}{Number of n length walks}
+    Suppose an adjacency matrix $A$. $A^n$ gives the number of $n$ length walks that exist from one vertex to another (or itself) for each vertex. $(A^n)_{i,j}$ is the $n$ length walk from $i$ to $j$.
+\end{theorembox}
+\begin{proof}
+    TODO: write a proof for the preceding theorem
+    We induct on $n$. We first prove the simplest case that $A^2$ gives the number of length $2$ walks between vertices for each vertex.
+\end{proof}
+
+\begin{definitionbox}{Transpose}
+    The transpose of an $m \times n$ matrix $A$ denoted by $A^T$ is an $n \times m$ matrix with
+    \begin{align*}
+        (A^T)_{i,j}=A_{j,i}
+    \end{align*}
+    If $A=A^T$ then we say that $A$ is symmetric. We can also express the inner-product using the
+    transpose of a vector
+    \begin{align*}
+        \langle a,b \rangle = a^Tb
+    \end{align*}
+\end{definitionbox}
+
+\begin{definitionbox}{Outer Product}
+    The outer product between two $n$ dimensional vectors $a$ and $b$ is an $n \times n$ matrix $ab^T$.
+    This gives us another interpretation of matrix multiplication. If $A$ and $B$ are $m \times n$ and
+    $p \times n$ matrices with columns $a_1,a_2,...,a_n$ and $b_1,b_2,...,b_n$ respectively then
+    \begin{align*}
+        AB^T = \sum_{i=1}^{n} a_ib_i^T
+    \end{align*}
+    It becomes easier to see when we think of it visually. Take $a_i$ to be an $m \times 1$ column
+    vector. Then take $b_i^T$ to be a $1 \times p$ row vector. Then each multiplication of these vectors
+    produces an $m \times p$ matrix. We then sum all these resulting matrices to get our final answer.
+\end{definitionbox}
+
+\subsection{Inverse of a Matrix}
+\begin{definitionbox}{Right Inverse of a Matrix}
+    Given a square matrix $A$, its right inverse is a matrix $A^-1$ with the property that
+    \begin{align*}
+        AA^(-1)=I
+    \end{align*}
+\end{definitionbox}
+While matrix multiplication is in general not commutative, the left and right inverse of a matrix are
+always the same
+\begin{definitionbox}{Left Inverse of a Matrix}
+A matrix $A^{-1}$ is a left inverse, i.e. $A^{-1}A=I$ if and only if it is the right inverse, i.e. 
+    $AA^{-1}=I$.
+\end{definitionbox}
+
+Suppose we want to solve a linear system $Ax=b$. If we know the inverse $A^{-1}$, we can get a closed
+form expression for the solution. Consider $x=A^{-1}b$.
+\begin{align*}
+    Ax = A(A^{-1}b) = (AA^{-1})b = Ib = b
+\end{align*}
+
+\section{Subspaces and Nullspaces}
+\begin{definitionbox}{Span}
+    The span of $v_1, v_2, ..., v_n$ where $v_i \in \mathbb{R}^m$ is all linear combinations in
+    $\mathbb{R}^m$ that can be formed of all $n$ vectors.
+\end{definitionbox}
+
+\begin{definitionbox}{Vector Space}
+    A vectors space is a set $V$ of objects closed under addition and scalar multiplication (closed
+    under linear combinations). That is $\forall v,w \in V, v+w \in V$. $\forall v \in V, \alpha \in
+    \mathbb{R}, \alpha v \in V$
+\end{definitionbox}
+
+\begin{definitionbox}{Subspace}
+    A subspace $S \subseteq V$ is also closed ... (similar to above). A set of vectors
+    ${v_1,..v_\lambda}$ generate $S$ if $\forall v_i \in S$ and span ${v_1,...v_\lambda} = S$
+\end{definitionbox}
+
+\begin{theorembox}{Subspces}
+    For subspaces $S_1$ and $S_2$, $S_1 \bigcap S_2$ is a subspace. $S_1 \bigcup S_2$ is not
+    necessarily a subspace.
+\end{theorembox}
+
+\begin{definitionbox}{Column Space}
+    Given a matrix $A$, the column space of $A$ is the span of its columns. That is for $m \times n$
+    matrix $A$ we have
+    \begin{align*}
+        \begin{bmatrix}
+            a_1 & a_2 & ... & a_n
+        \end{bmatrix} \\
+    \end{align*}
+    $C(A)=span({a_1,...a_n})={Ac | c \in \mathbb{R}^n}$
+\end{definitionbox}
+
+\begin{theorembox}{}
+    $C(A), N(A)$ are vector spaces ($N(A)$ is the nullspace of A).
+\end{theorembox}
+
+\begin{theorembox}{}
+    For $A_{m \times n}$, $C(A) \subseteq \mathbb{R}^m, N(A) \subseteq \mathbb{R}^n$ and vice versa
+    $A^T$
+\end{theorembox}
+
+\begin{definitionbox}{Nullspace}
+    The nullspace of $A$ is the set of all vectors $x$ that make the equation $Ax=0$ true.
+\end{definitionbox}
+
+\begin{theorembox}{}
+    Consider $Ax=b$. \\
+    If $b \notin C(A)$ then no solution.
+    If $b \in C(A)$ then we have to consider two cases:
+    \begin{itemize}
+        \item $N(A)=\{0\} \implies$ 1 solution.
+        \item $N(A)=\{0,x_1,...\} \implies$ infinite solutions.
+    \end{itemize}
+\end{theorembox}
+
+\begin{theorembox}{Long ass Theorem}
+    For $A_{n \times n}$, $A$ invertible $\iff$ $C(A)=\mathbb{R}^n \iff$ cols of $A$ are linear
+    independent $\iff N(A)=\{0\} \iff Ax=b$ uniquely solvable $\forall b$.
+\end{theorembox}
+
+\begin{theorembox}{Important theorem}
+    Gauss-Jordan elimination preserves nullspace at every step. It is important to note that
+    Gauss-Jordan does NOT preserve the column space of $A$. \\
+    For $B$ invertible and $A=BA'$ where
+    $A'$ is some matrix, $N(A')=N(A)$. If $B$ not invertible $N(A') \leq N(A)$
+\end{theorembox}
+
+\begin{theorembox}{}
+    For $T$ invertible, $N(A)=N(AT)$ \\
+    $x \in N(TA) \iff TAx=0 \iff T^-1 T Ax = T^-1 0 \iff Ax=0$
+\end{theorembox}
+
+\begin{theorembox}{}
+    For $A_{n \times n}, B_{n \times n}$, if $x \in N(A)$ and $x \in N(B), x \in N(A+B)$
+\end{theorembox}
+
+\begin{theorembox}{}
+    $C(AB) \subseteq C(A)$
+\end{theorembox}
+\begin{proof}
+    Exercise!   
+\end{proof}
+
 \end{document}
