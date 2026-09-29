@@ -693,43 +693,116 @@ The last line should be understood as the kth column of $C$.
 \begin{definitionbox}{Right Inverse of a Matrix}
     Given a square matrix $A$, its right inverse is a matrix $A^-1$ with the property that
     \begin{align*}
-        AA^(-1)=I
+        AA^{-1}=I
+    \end{align*}
+    Given a non-singular $2 \times 2$ matrix
+    \begin{align*}
+        A=
+        \begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}
+    \end{align*}
+    its inverse is
+    \begin{align*}
+        A^{-1}=
+        \frac{1}{ad-bc}
+        \begin{bmatrix}
+            d & -b \\
+            -c & a
+        \end{bmatrix}
     \end{align*}
 \end{definitionbox}
 While matrix multiplication is in general not commutative, the left and right inverse of a matrix are
 always the same
-\begin{definitionbox}{Left Inverse of a Matrix}
-A matrix $A^{-1}$ is a left inverse, i.e. $A^{-1}A=I$ if and only if it is the right inverse, i.e. 
-    $AA^{-1}=I$.
-\end{definitionbox}
 
 Suppose we want to solve a linear system $Ax=b$. If we know the inverse $A^{-1}$, we can get a closed
 form expression for the solution. Consider $x=A^{-1}b$.
 \begin{align*}
     Ax = A(A^{-1}b) = (AA^{-1})b = Ib = b
 \end{align*}
+and thus $x$ solves the equation.
 
-\section{Subspaces and Nullspaces}
+To find $A^{-1}$, we can use Gauss-Jordan elimination (you probably know how to do this, so I'll
+ommit it). Here's a fun fact about elementary row operations:
+
+\begin{definitionbox}{Matrix Multiply for Row Operations}
+    Given an $n \times m$ matrix $A$, the operation of adding $\alpha$ times the $ith$ row to the
+    $jth$ row can be performed by computing $BA$, where $B$ is an $m \times m$ matrix with ones
+    along the diagonal, $B_{j,i}=\alpha$ and all of the other entries are zero.
+\end{definitionbox}
+
+\begin{definitionbox}{Matrix Multiply for Swapping Rows}
+    Given an $n \times n$ matrix $A$, the operation of swapping the $ith$ and $jth$ rows can be
+    performed by computing $BA$, where $B$ is an $m \times m$ matrix with $B_{k,k}=1$ for all
+    $k \neq i,j$ and $B_{i,j}=1$ and all of the other entries are zero.
+\end{definitionbox}
+
+Now what's the point of all these row operations?
+
+\begin{theorembox}{When does the Inverse Exist?}
+    If $A$ is square and non-singular, then its inverse exists. Moreover, if $A$ and $B$ are square,
+    non-singular matrices, then $(AB)^{-1}=B^{-1}A^{-1}$
+\end{theorembox}
+
+\begin{theorembox}{Uniqueness of the Inverse}
+    If it exists, the inverse of $A$ is unique.
+\end{theorembox}
+\begin{proof}
+    We found $A^{-1}$ by performing Gauss-Jordan elimination, whose steps preserve the set of
+    solutions., Since the linear system $Ix=b$ has a unique solution for any $b$ (because our matrix
+    is non-singular) so too does the linear system $Ax=b$. Therefore, the columns of $A^{-1}$, which
+    solve the linear systems $Ax_i=e_i$, are unique and this $A^{-1}$ is unique too.
+\end{proof}
+
+But if we end up with a singular matrix...
+
+\begin{theorembox}{When does the Inverse not Exist?}
+    If $A$ is singular, then it does not have an inverse.
+\end{theorembox}
+\begin{proof}
+    Suppose $A$ did have an inverse. Then for any $b$, there would be a solution $x=A^{-1}b$. However
+    when $A$ is singular, we know $\exists b$ where there is no solution, so we have a contradiction
+    and the inverse cannot exist.
+\end{proof}
+
+\section{Vector Spaces}
+Vector spaces are a key abstraction that makes us think about linear algebra in a cool way (What is
+bro talking about? Key abstraction???)
+
+\begin{definitionbox}{Vector Space}
+    A vector space over the reals is a set $V$ with notions of
+
+    \begin{itemize}
+        \item How to add: For all $v,w \in V$ we have $v+w \in V$
+        \item How to scale: For all $v \in V$ and any $\alpha \in \mathbb{R}$ we have 
+            $\alpha v \in V$
+    \end{itemize}
+\end{definitionbox}
+
+\begin{definitionbox}{Subspace}
+    If $V$ is a vector space then $S \subseteq V$ is a subspace if
+    \begin{enumerate}
+        \item For all $v,w \in S$ we have $v+w \in S$
+        \item For all $v \in S$, and any $\alpha \in \mathbb{R}$ we have $\alpha v \in S$
+    \end{enumerate}
+    That is, we are closed under linear combinations.
+\end{definitionbox}
+
+\begin{theorembox}{Intersection and Union of Subspaces}
+    If $S_1$ and $S_2$ are subspaces then $S=S_1 \bigcap S_2$ is too, but not necessarily
+    $S_1 \bigcup S_2$.
+\end{theorembox}
+
+\begin{proof}
+    Just think about it. Take $v,w \in S$ and go from there.
+\end{proof}
+
+\subsection{The Columnspace}
 \begin{definitionbox}{Span}
     The span of $v_1, v_2, ..., v_n$ where $v_i \in \mathbb{R}^m$ is all linear combinations in
     $\mathbb{R}^m$ that can be formed of all $n$ vectors.
 \end{definitionbox}
-
-\begin{definitionbox}{Vector Space}
-    A vectors space is a set $V$ of objects closed under addition and scalar multiplication (closed
-    under linear combinations). That is $\forall v,w \in V, v+w \in V$. $\forall v \in V, \alpha \in
-    \mathbb{R}, \alpha v \in V$
-\end{definitionbox}
-
-\begin{definitionbox}{Subspace}
-    A subspace $S \subseteq V$ is also closed ... (similar to above). A set of vectors
-    ${v_1,..v_\lambda}$ generate $S$ if $\forall v_i \in S$ and span ${v_1,...v_\lambda} = S$
-\end{definitionbox}
-
-\begin{theorembox}{Subspces}
-    For subspaces $S_1$ and $S_2$, $S_1 \bigcap S_2$ is a subspace. $S_1 \bigcup S_2$ is not
-    necessarily a subspace.
-\end{theorembox}
 
 \begin{definitionbox}{Column Space}
     Given a matrix $A$, the column space of $A$ is the span of its columns. That is for $m \times n$
@@ -739,7 +812,63 @@ form expression for the solution. Consider $x=A^{-1}b$.
             a_1 & a_2 & ... & a_n
         \end{bmatrix} \\
     \end{align*}
-    $C(A)=span({a_1,...a_n})={Ac | c \in \mathbb{R}^n}$
+    $C(A)=span({a_1,...a_n})={Ac, c \in \mathbb{R}^n}$
+\end{definitionbox}
+
+The columnspace $C(A)$ is actually a vector space. Take $v,w \in C(A)$ then there are vectors $x$
+and $y$ of dimension $m$ so that $Ax=v, Ay=w$. Now, we know that $A(x+y)=v+w$, so we have a way to
+represent $v+w$ as a linear combination of the columns of $A$ and hence $c+w \in C(A)$. Given
+$Ax=v$ we have that $\alpha v = A(\alpha x)$ and hence $v \in C(A)$ implies $\alpha v \in C(A)$.
+
+\begin{theorembox}{}
+    The linear system $Ax=b$ has a solution iff $b \in C(A)$.
+\end{theorembox}
+
+\begin{theorembox}{Invertibility}
+    Suppose $A$ is an $n \times n$ matrix. Then $A$ is invertible iff $C(A) = \mathbb{R}^n$.
+\end{theorembox}
+
+\begin{proof}
+    WTP invertible $\implies$ column space is $\mathbb{R}^n$. Assume $A$ invertible. We want to show
+    that $b \in C(A)$ for any $b \in \mathbb{R^n}$. We can do this by showing $Ax=b$ has a solution
+    $\forall b \in \mathbb{R}^n$
+    \begin{align*}
+        Ax=(AA^{-1})b=Ib=b
+    \end{align*}
+    Let's do the reverse direction. Assume $C(A) = \mathbb{R}^n$. We can use the fact that the basis
+    vectors $\in \mathbb{R}^n$ must lie in our column space. We also know that there is some $x_i$
+    such that $Ax_i=e_i$ for $1 \leq i \leq n$.
+    \begin{align*}
+        A
+        \begin{bmatrix}
+            x_1 & x_2 & ... & x_n \\   
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            e_1 & e_2 & ... & e_n \\
+        \end{bmatrix}
+        = I
+    \end{align*}
+    And we've formed our inverse.
+\end{proof}
+
+\section{Nullspace}
+
+\begin{definitionbox}{Nullspace}
+    The nullspace of a matrix $A$ is the set of all vectors $x$ such that $Ax=0$.
+\end{definitionbox}
+
+If $A$ is an $m \times n$ matrix then its column space is a subspace of $\mathbb{R}^m$ while its
+nullspace is a subspace of $\mathbb{R}^n$. This is because, to multiply a vector $x$ by $A$, $x$ must
+have $n$ components. on the other hand, the number of dimensions of the column space is equal to at
+most the number of entries in each column of $A$, which is $m$.
+
+\newpage
+
+\section{A Bunch of Dumb Theorems for Subspaces and Nullspaces}
+\begin{definitionbox}{Subspace}
+    A subspace $S \subseteq V$ is also closed ... (similar to above). A set of vectors
+    ${v_1,..v_\lambda}$ generate $S$ if $\forall v_i \in S$ and span ${v_1,...v_\lambda} = S$
 \end{definitionbox}
 
 \begin{theorembox}{}
